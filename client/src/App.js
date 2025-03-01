@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import './App.css'; // Ensure this contains your styling + media queries
 
 // const socket = io('http://localhost:4000');
-const socket = io('https://roundclock-mrbs.onrender.com');
+const socket = io("https://roundclock-mrbs.onrender.com");
 
 function App() {
   const [timer, setTimer] = useState(30);
