@@ -70,20 +70,28 @@ function App() {
           <div className="infoRow">
             <div className="infoBox">
               <div>Timer</div>
-              <div>{timer}</div>
+              <div className="infoBoxTimer">
+                <div>{timer}</div>
+              </div>
             </div>
             <div className="infoBox">
               <div>Current Player</div>
-              <div>{currentPlayer + 1}</div>
+              <div className="infoBoxCurrentPlayer">
+                <div>{currentPlayer + 1}</div>
+              </div>
             </div>
           </div>
 
           {/* End Turn Button (Visible to both Players and Admins, disabled when isRunning is false) */}
+          
           <div className="endTurnRow">
             <button className={`buttonEl ${!isRunning ? "disabled" : ""}`} onClick={handleEndTurn}>
+              <div className="endTurnBox">
               End Turn
+              </div>
             </button>
           </div>
+          
 
           {/* Role Selection (Moved Below "End Turn") */}
           <div className="roleSelector">

@@ -28,7 +28,8 @@
 
 /* ============ MAIN SECTION ============ */
 .mainSection {
-  margin-bottom: 20px;
+  margin-bottom: 80px;
+  /* height: 100%; */
 }
 
 /* Row for Timer + Current Player */
@@ -43,9 +44,24 @@
   background-color: rgba(255, 255, 255, 0.1);
   padding: 10px 20px;
   border-radius: 8px;
-  min-width: 100px;
+  min-width: 80%;
   text-align: center;
   font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.infoRow {
+  flex-direction: column;
+  align-items: left;
+}
+
+.infoBoxTimer{
+  font-size: 12rem;
+}
+
+/* Individual boxes (Timer/Current Player) */
+.infoBoxCurrentPlayer {
+  font-size: 6rem;
 }
 
 /* Row for the End Turn button only in the main section */
@@ -95,10 +111,13 @@
 .buttonEl.disabled {
   background-color: #aaa; /* Greyed out */
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.3;
   pointer-events: none; /* Prevents clicking */
 }
 
+.endTurnBox {
+  font-size: 2.6rem;
+}
 
 /* Row for the dynamic "Set Starting Player" buttons */
 .playerButtonsRow {
