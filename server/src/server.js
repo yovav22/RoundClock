@@ -1,20 +1,23 @@
-// server.js
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const cors = require('cors');
 
+// Use environment port for deployment (fallback to 4000 locally)
+const PORT = process.env.PORT || 4000;
+
 const app = express();
 const server = http.createServer(app);
 
+// Allow frontend access from any origin for Render deployment
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '*',
   methods: ['GET', 'POST']
 }));
 
 const io = socketIO(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST']
   }
 });
@@ -27,8 +30,6 @@ let firstPlayer = 3;
 let currentPlayer = 3;
 let isRunning = false;
 let intervalId = null;
-
-const PORT = 4000;
 
 // Broadcast state to all clients
 function broadcastTimerUpdate() {
@@ -44,21 +45,19 @@ function broadcastTimerUpdate() {
 
 // Handle end of round
 function handleEndRound() {
-    console.log('End Round...');
-    // Stop the timer if it's running
-    clearInterval(intervalId);
-    isRunning = false;
-  
-    timer = 30;
-    currentPlayer = firstPlayer;
-    broadcastTimerUpdate();
-    console.log('End Round');
-  }
+  console.log('End Round...');
+  clearInterval(intervalId);
+  isRunning = false;
+  timer = 30;
+  currentPlayer = firstPlayer;
+  broadcastTimerUpdate();
+  console.log('Round Ended');
+}
 
 io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
+  console.log(`New client connected: ${socket.id}`);
 
-  // Send the current state immediately
+  // Send current state immediately
   socket.emit('timerUpdate', {
     timer,
     dealer,
@@ -68,12 +67,13 @@ io.on('connection', (socket) => {
     numOfPlayers
   });
 
-  // End turn
+  // End turn logic
   socket.on('endTurn', () => {
+    if (!isRunning) return;
     timer = 30;
     let nextPlayer = (currentPlayer + 1) % numOfPlayers;
     if (nextPlayer === firstPlayer) {
-        handleEndRound();
+      handleEndRound();
     } else {
       currentPlayer = nextPlayer;
       broadcastTimerUpdate();
@@ -100,76 +100,65 @@ io.on('connection', (socket) => {
     broadcastTimerUpdate();
   });
 
-  // Set the total number of players
+  // Set total number of players
   socket.on('setPlayersCount', (newCount) => {
     numOfPlayers = parseInt(newCount, 10) || 1;
     if (numOfPlayers < 1) numOfPlayers = 1;
-    console.log('Number of players set to:', numOfPlayers);
-
-    // Ensure currentPlayer is within range
     dealer = dealer % numOfPlayers;
     currentPlayer = currentPlayer % numOfPlayers;
+    console.log(`Number of players set to: ${numOfPlayers}`);
     broadcastTimerUpdate();
   });
 
   // End round only
   socket.on('endRound', handleEndRound);
 
-  // New game
+  // Start a new game
   socket.on('newGame', () => {
     console.log('New game requested');
-    // Stop the timer if it's running
     clearInterval(intervalId);
     isRunning = false;
-
-    // Reset logic
     timer = 30;
-    // currentPlayer should increament by 1
     dealer = (dealer + 1) % numOfPlayers;
     firstPlayer = (dealer + 3) % numOfPlayers;
     currentPlayer = firstPlayer;
-
     isFirstRound = true;
     broadcastTimerUpdate();
-    console.log('Game was reset to default state');
+    console.log('Game reset to default state');
   });
 
- // Reset game
- socket.on('resetGame', () => {
-     console.log('Reset game requested');
-     // Stop the timer if it's running
-     clearInterval(intervalId);
-     isRunning = false;
- 
-     // Reset logic
-     timer = 30;
-     dealer = 0;
-     currentPlayer = (dealer + 3) % numOfPlayers;
-     isFirstRound = true;
-     broadcastTimerUpdate();
-     console.log('Game was reset to default state');
-   });
+  // Reset the game
+  socket.on('resetGame', () => {
+    console.log('Game reset requested');
+    clearInterval(intervalId);
+    isRunning = false;
+    timer = 30;
+    dealer = 0;
+    currentPlayer = (dealer + 3) % numOfPlayers;
+    isFirstRound = true;
+    broadcastTimerUpdate();
+  });
 
-  // Set the starting player
+  // Set starting player
   socket.on('setStartingPlayer', (playerIndex) => {
     let index = parseInt(playerIndex, 10);
     if (isNaN(index) || index < 0 || index >= numOfPlayers) {
-      index = 0; // fallback or do nothing
+      index = 0;
     }
     currentPlayer = index;
-    console.log('Starting player set to:', currentPlayer);
-
+    console.log(`Starting player set to: ${currentPlayer}`);
     broadcastTimerUpdate();
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
-// Serve static files if needed
+// Serve static files (for future expansion)
 app.use(express.static('public'));
 
+// Start the server
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
