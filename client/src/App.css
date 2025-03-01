@@ -1,0 +1,188 @@
+/* App.css */
+
+/* Page background: green poker table gradient */
+.page {
+  background: linear-gradient(to bottom right, #2c662d, #091d08);
+  min-height: 100vh;
+  margin: 0;
+  padding: 30px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Main container for everything */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Header/title at the top */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ============ MAIN SECTION ============ */
+.mainSection {
+  margin-bottom: 20px;
+}
+
+/* Row for Timer + Current Player */
+.infoRow {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+/* Individual boxes (Timer/Current Player) */
+.infoBox {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 8px;
+  min-width: 100px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Row for the End Turn button only in the main section */
+.endTurnRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* ============ SECONDARY SECTION ============ */
+.secondarySection {
+  margin-top: 20px;
+}
+
+/* Generic row for multiple buttons */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* A row for inputs, e.g., # of players */
+.inputRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Base button style */
+.buttonEl {
+  background-color: #e1e1e1;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 90px;
+  text-align: center;
+}
+
+/* Disabled button styling */
+.buttonEl.disabled {
+  background-color: #aaa; /* Greyed out */
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none; /* Prevents clicking */
+}
+
+
+/* Row for the dynamic "Set Starting Player" buttons */
+.playerButtonsRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Highlight the current player in light blue */
+.currentPlayer {
+  background-color: lightblue !important;
+}
+
+/* Highlight the dealer in light gray */
+.dealer {
+  background-color: rgb(196, 97, 97) !important;
+}
+
+/* =========================================
+   MEDIA QUERY FOR SMALL (MOBILE) SCREENS
+   ========================================= */
+@media (max-width: 600px) {
+  /* Stack elements vertically in the infoRow */
+  .infoRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* If you want End Turn to remain center, no change needed here */
+
+  .buttonRow {
+    flex-direction: column;
+  }
+
+  .inputRow {
+    flex-direction: column;
+  }
+
+  .infoBox {
+    margin-bottom: 10px;
+  }
+
+  .container {
+    width: 90%;
+    margin: auto;
+  }
+}
+
+
+/* Role Selector */
+.roleSelector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* Add space below End Turn button */
+}
+
+.roleSelector select {
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 150px;
+}
+/* Admin Section Toggle Button */
+.adminToggleBtn {
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.adminToggleBtn:hover {
+  background-color: #666;
+}
+
+.roleLabel {
+  font-size: 1rem;
+  margin-bottom: 10px; /* Increased space between label and selector */
+}

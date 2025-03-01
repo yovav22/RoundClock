@@ -1,0 +1,13 @@
+# .gitignore
+
+# Node
+node_modules
+
+# Logs
+*.log
+
+# Build outputs for React (if you build production)
+client/build
+
+# If using macOS
+.DS_Store
