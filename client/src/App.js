@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import './App.css'; // Ensure this contains your styling + media queries
+import './App.css';
 
 // const socket = io('http://localhost:4000');
 const socket = io("https://roundclock-mrbs.onrender.com");
@@ -15,8 +15,33 @@ function App() {
   const [playersInput, setPlayersInput] = useState(7);
   const [role, setRole] = useState("player"); // "player" or "admin"
   const [adminControlsVisible, setAdminControlsVisible] = useState(false);
+  const [isAudioUnlocked, setIsAudioUnlocked] = useState(false);
+  const [ticSound, setTicSound] = useState(null);
+  const [buzzerSound, setBuzzerSound] = useState(null);
 
   useEffect(() => {
+    // Load sounds only once
+    const tic = new Audio("/sounds/tic.mp3");
+    const buzzer = new Audio("/sounds/bell.mp3");
+
+    setTicSound(tic);
+    setBuzzerSound(buzzer);
+
+    // Unlock audio on user interaction
+    const unlockAudio = () => {
+      tic.play().catch(() => {}); // Try playing silently to unlock
+      buzzer.play().catch(() => {});
+      setIsAudioUnlocked(true);
+      document.removeEventListener("click", unlockAudio);
+    };
+
+    document.addEventListener("click", unlockAudio);
+    return () => document.removeEventListener("click", unlockAudio);
+  }, []);
+
+  useEffect(() => {
+    if (!ticSound || !buzzerSound) return;
+
     socket.on('timerUpdate', (data) => {
       setTimer(data.timer);
       setDealerPlayer(data.dealer);
@@ -24,12 +49,21 @@ function App() {
       setCurrentPlayer(data.currentPlayer);
       setIsRunning(data.isRunning);
       setNumOfPlayers(data.numOfPlayers);
+
+      if (isAudioUnlocked) {
+        if (data.isRunning && data.timer <= 5 && data.timer > 0) {
+          ticSound.currentTime = 0; // Reset for overlapping sounds
+          ticSound.play().catch(() => {});
+        }
+        if (data.isRunning && data.timer === 0) {
+          buzzerSound.currentTime = 0;
+          buzzerSound.play().catch(() => {});
+        }
+      }
     });
 
-    return () => {
-      socket.off('timerUpdate');
-    };
-  }, []);
+    return () => socket.off('timerUpdate');
+  }, [isAudioUnlocked, ticSound, buzzerSound]);
 
   // Socket event handlers
   const handleEndTurn = () => {
@@ -82,18 +116,16 @@ function App() {
             </div>
           </div>
 
-          {/* End Turn Button (Visible to both Players and Admins, disabled when isRunning is false) */}
-          
+          {/* End Turn Button */}
           <div className="endTurnRow">
             <button className={`buttonEl ${!isRunning ? "disabled" : ""}`} onClick={handleEndTurn}>
               <div className="endTurnBox">
-              End Turn
+                End Turn
               </div>
             </button>
           </div>
-          
 
-          {/* Role Selection (Moved Below "End Turn") */}
+          {/* Role Selection */}
           <div className="roleSelector">
             <label className="roleLabel">Select Role:</label>
             <select value={role} onChange={(e) => setRole(e.target.value)}>
