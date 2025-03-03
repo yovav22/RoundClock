@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import './App.css';
+
+document.addEventListener('wheel', function(event) {
+  if (event.ctrlKey) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener('gesturestart', function(event) {
+  event.preventDefault();
+});
 
 
 const isLocal = window.location.hostname === "localhost";
@@ -22,8 +32,6 @@ function App() {
   const [role, setRole] = useState("player"); // "player" or "admin"
   const [adminControlsVisible, setAdminControlsVisible] = useState(false);
   const [isAudioUnlocked, setIsAudioUnlocked] = useState(false);
-  const [ticSound, setTicSound] = useState(null);
-  const [buzzerSound, setBuzzerSound] = useState(null);
 
   useEffect(() => {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -34,29 +42,37 @@ function App() {
     }
   }, []);
   
+  const ticSound = useRef(null);
+  const buzzerSound = useRef(null);
+  
   useEffect(() => {
-    // Load sounds only once
-    const tic = new Audio("/sounds/tic.mp3");
-    const buzzer = new Audio("/sounds/bell.mp3");
-
-    setTicSound(tic);
-    setBuzzerSound(buzzer);
-
-    // Unlock audio on user interaction
+    // Initialize sounds inside useEffect
+    ticSound.current = new Audio("/sounds/tic.mp3");
+    buzzerSound.current = new Audio("/sounds/bell.mp3");
+  
+    // Unlock audio on user interaction (Needed for iOS/Android)
     const unlockAudio = () => {
-      tic.play().catch(() => {}); // Try playing silently to unlock
-      buzzer.play().catch(() => {});
+      if (ticSound.current) {
+        ticSound.current.play().catch(() => {});
+        ticSound.current.pause();
+        ticSound.current.currentTime = 0;
+      }
+  
+      if (buzzerSound.current) {
+        buzzerSound.current.play().catch(() => {});
+        buzzerSound.current.pause();
+        buzzerSound.current.currentTime = 0;
+      }
+  
       setIsAudioUnlocked(true);
       document.removeEventListener("click", unlockAudio);
     };
-
+  
     document.addEventListener("click", unlockAudio);
     return () => document.removeEventListener("click", unlockAudio);
-  }, []);
+  }, []);  
 
   useEffect(() => {
-    if (!ticSound || !buzzerSound) return;
-
     socket.on('timerUpdate', (data) => {
       setTimer(data.timer);
       setDealerPlayer(data.dealer);
@@ -65,20 +81,23 @@ function App() {
       setIsRunning(data.isRunning);
       setNumOfPlayers(data.numOfPlayers);
 
+      // ✅ Play ticSound every second in the last 5 seconds
       if (isAudioUnlocked) {
         if (data.isRunning && data.timer <= 5 && data.timer > 0) {
-          ticSound.currentTime = 0; // Reset for overlapping sounds
-          ticSound.play().catch(() => {});
+          ticSound.current.currentTime = 0; // Reset for overlapping sounds
+          ticSound.current.play().catch(() => {});
         }
+
+        // ✅ Play buzzerSound when timer reaches 0
         if (data.isRunning && data.timer === 0) {
-          buzzerSound.currentTime = 0;
-          buzzerSound.play().catch(() => {});
+          buzzerSound.current.currentTime = 0;
+          buzzerSound.current.play().catch(() => {});
         }
       }
     });
 
     return () => socket.off('timerUpdate');
-  }, [isAudioUnlocked, ticSound, buzzerSound]);
+  }, [isAudioUnlocked]);
 
   // Socket event handlers
   // Socket event handlers
