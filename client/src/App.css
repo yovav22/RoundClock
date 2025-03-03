@@ -2,9 +2,9 @@
 
 .install-prompt {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Centers both horizontally & vertically */
+  top: 70%; /* Moves to 70% of the viewport height */
+  left: 50%; /* Moves to the horizontal center */
+  transform: translate(-50%, -50%); /* Fully centers it */
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 15px 25px;
@@ -12,9 +12,9 @@
   font-size: 18px;
   text-align: center;
   z-index: 1000;
-  max-width: 90%; /* Prevents it from going out of screen on small devices */
+  max-width: 90%; /* Prevents it from going off-screen */
+  white-space: nowrap; /* Keeps text in one line */
 }
-
 
 
 /* Page background: green poker table gradient */

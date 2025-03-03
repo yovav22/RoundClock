@@ -139,22 +139,22 @@ io.on("connection", (socket) => {
     broadcastTimerUpdate();
   });
 
+  // Set starting player
+  socket.on("setTimeInSeconds", (timeInSeconds) => {
+      let timeInSecondsInt = parseInt(timeInSeconds, 10);
+      if (isNaN(timeInSecondsInt) || timeInSecondsInt < 0 ) {
+          timeInSecondsInt = 0;
+      }
+      maxTimeInSeconds = timeInSecondsInt;
+      timer = maxTimeInSeconds
+      console.log(`Starting time set to: ${maxTimeInSeconds}`);
+      broadcastTimerUpdate();
+});
+
   socket.on("disconnect", () => {
     console.log(`Client disconnected: ${socket.id}`);
   });
 });
-
-  // Set starting player
-socket.on("setTimeInSeconds", (timeInSeconds) => {
-    let timeInSecondsInt = parseInt(timeInSeconds, 30);
-    if (isNaN(time) || timeInSecondsInt < 0 ) {
-        timeInSecondsInt = 0;
-    }
-    maxTimeInSeconds = timeInSecondsInt;
-    timer = maxTimeInSeconds
-    console.log(`Starting time set to: ${maxTimeInSeconds}`);
-    broadcastTimerUpdate();
-  });
 
 // Start the server
 server.listen(PORT, () => {

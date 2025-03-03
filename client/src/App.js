@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import './App.css';
 
-// const socket = io('http://localhost:4000');
-const socket = io("https://roundclock-mrbs.onrender.com");
+
+const isLocal = window.location.hostname === "localhost";
+
+// Set the socket URL based on the environment
+const socket = io(isLocal ? "http://localhost:4000" : "https://roundclock-mrbs.onrender.com");
+
 
 function App() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
