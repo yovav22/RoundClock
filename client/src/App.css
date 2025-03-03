@@ -1,51 +1,35 @@
 /* App.css */
-/* Ensure Safe Area for iOS */
-html, body {
-  background: linear-gradient(to bottom right, #2c662d, #091d08);
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  color: #fff;
-  font-family: Arial, sans-serif;
-}
 
-/* Page background should cover entire screen including Safe Area */
+/* Page background: green poker table gradient */
 .page {
   background: linear-gradient(to bottom right, #2c662d, #091d08);
   min-height: 100vh;
-  padding: env(safe-area-inset-top) 20px 20px env(safe-area-inset-bottom);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 0;
+  padding: 20px;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
 /* Main container for everything */
 .container {
   max-width: 600px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: env(safe-area-inset-top);
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 2px 20px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Fix top spacing issue */
+/* Header/title at the top */
 .header {
   text-align: center;
-  font-size: 2rem;
-  padding-top: env(safe-area-inset-top); /* Ensure it respects safe area */
-  margin-top: 0;
+  /* margin-bottom: 10px; */
 }
 
 /* ============ MAIN SECTION ============ */
-/* Make main section take full screen */
 .mainSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Ensure it takes full screen */
-  width: 100%;
+  margin-bottom: 70px;
+  /* height: 100%; */
 }
 
 /* Row for Timer + Current Player */
@@ -82,11 +66,9 @@ html, body {
 
 /* Row for the End Turn button only in the main section */
 .endTurnRow {
-  position: absolute;
-  bottom: env(safe-area-inset-bottom);
-  width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 /* ============ SECONDARY SECTION ============ */
