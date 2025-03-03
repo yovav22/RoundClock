@@ -115,7 +115,8 @@ io.on("connection", (socket) => {
     isRunning = false;
     timer = 30;
     dealer = 0;
-    currentPlayer = (dealer + 3) % numOfPlayers;
+    firstPlayer = (dealer + 3) % numOfPlayers;
+    currentPlayer = firstPlayer;
     broadcastTimerUpdate();
   });
 
