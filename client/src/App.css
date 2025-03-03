@@ -15,6 +15,12 @@
   max-width: 90%; /* Prevents it from going off-screen */
 }
 
+html, body {
+  touch-action: manipulation; /* Prevents pinch zoom */
+  user-select: none; /* Prevents text selection */
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
 
 /* Page background: green poker table gradient */
 .page {
