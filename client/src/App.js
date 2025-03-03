@@ -60,7 +60,6 @@ function App() {
       setCurrentPlayer(data.currentPlayer);
       setIsRunning(data.isRunning);
       setNumOfPlayers(data.numOfPlayers);
-      setTimeInSeconds(data.timer);
 
       if (isAudioUnlocked) {
         if (data.isRunning && data.timer <= 5 && data.timer > 0) {
@@ -180,6 +179,19 @@ function App() {
                     Set Players
                   </button>
                 </div>
+                <div className="inputRow">
+                  <label>Timer Duration (seconds):</label>
+                  <input
+                    type="number"
+                    min="10"
+                    value={timeInSeconds}
+                    onChange={(e) => setTimeInSeconds(e.target.value)}
+                    style={{ width: '60px', padding: '5px' }}
+                  />
+                  <button className="buttonEl" onClick={handleSetTimeInSeconds}>
+                    Set Timer
+                  </button>
+                </div>
 
                 <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                   <p>Dealer: Player {dealer + 1} | First Player: Player {firstPlayer + 1}</p>
@@ -198,12 +210,6 @@ function App() {
                       </button>
                     );
                   })}
-                </div>
-                {/* Set Timer Duration */}
-                <div className="inputRow">
-                  <label>Timer Duration (seconds):</label>
-                  <input type="number" min="5" value={timeInSeconds} onChange={(e) => setTimeInSeconds(e.target.value)} style={{ width: '60px', padding: '5px' }} />
-                  <button className="buttonEl" onClick={handleSetTimeInSeconds}>Set Timer</button>
                 </div>
               </div>
             )}
