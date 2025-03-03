@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/RoundClock/static/css/main.dafb82ee.css",
+    "main.css": "/RoundClock/static/css/main.7e559173.css",
     "main.js": "/RoundClock/static/js/main.0affb307.js",
     "static/js/453.419a5d54.chunk.js": "/RoundClock/static/js/453.419a5d54.chunk.js",
     "index.html": "/RoundClock/index.html",
-    "main.dafb82ee.css.map": "/RoundClock/static/css/main.dafb82ee.css.map",
+    "main.7e559173.css.map": "/RoundClock/static/css/main.7e559173.css.map",
     "main.0affb307.js.map": "/RoundClock/static/js/main.0affb307.js.map",
     "453.419a5d54.chunk.js.map": "/RoundClock/static/js/453.419a5d54.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dafb82ee.css",
+    "static/css/main.7e559173.css",
     "static/js/main.0affb307.js"
   ]
 }
