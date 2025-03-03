@@ -20,11 +20,12 @@ app.get("/", (req, res) => {
 });
 
 // Game state variables
-let timer = 30;
+let maxTimeInSeconds = 30;
+let timer = maxTimeInSeconds;
 let numOfPlayers = 7;
 let dealer = 0;
 let firstPlayer = 3;
-let currentPlayer = 3;
+let currentPlayer = firstPlayer;
 let isFirstRound = true;
 let isRunning = false;
 let intervalId = null;
@@ -42,7 +43,7 @@ function handleEndRound() {
   if (isFirstRound) {
     firstPlayer = (dealer + 1) % numOfPlayers;
   }
-  timer = 30;
+  timer = maxTimeInSeconds;
   currentPlayer = firstPlayer;
   isFirstRound = false;
   broadcastTimerUpdate();
@@ -58,7 +59,7 @@ io.on("connection", (socket) => {
   // End turn logic
   socket.on("endTurn", () => {
     if (!isRunning) return;
-    timer = 30;
+    timer = maxTimeInSeconds;
     let nextPlayer = (currentPlayer + 1) % numOfPlayers;
     if (nextPlayer === firstPlayer) {
       handleEndRound();
@@ -77,7 +78,7 @@ io.on("connection", (socket) => {
           timer--;
         } else {
           currentPlayer = (currentPlayer + 1) % numOfPlayers;
-          timer = 30;
+          timer = maxTimeInSeconds;
         }
         broadcastTimerUpdate();
       }, 1000);
@@ -105,7 +106,7 @@ io.on("connection", (socket) => {
     console.log("New game requested");
     clearInterval(intervalId);
     isRunning = false;
-    timer = 30;
+    timer = maxTimeInSeconds;
     dealer = (dealer + 1) % numOfPlayers;
     firstPlayer = (dealer + 3) % numOfPlayers;
     currentPlayer = firstPlayer;
@@ -119,7 +120,7 @@ io.on("connection", (socket) => {
     console.log("Game reset requested");
     clearInterval(intervalId);
     isRunning = false;
-    timer = 30;
+    timer = maxTimeInSeconds;
     dealer = 0;
     firstPlayer = (dealer + 3) % numOfPlayers;
     currentPlayer = firstPlayer;
@@ -142,6 +143,18 @@ io.on("connection", (socket) => {
     console.log(`Client disconnected: ${socket.id}`);
   });
 });
+
+  // Set starting player
+socket.on("setTimeInSeconds", (timeInSeconds) => {
+    let timeInSecondsInt = parseInt(timeInSeconds, 30);
+    if (isNaN(time) || timeInSecondsInt < 0 ) {
+        timeInSecondsInt = 0;
+    }
+    maxTimeInSeconds = timeInSecondsInt;
+    timer = maxTimeInSeconds
+    console.log(`Starting time set to: ${maxTimeInSeconds}`);
+    broadcastTimerUpdate();
+  });
 
 // Start the server
 server.listen(PORT, () => {

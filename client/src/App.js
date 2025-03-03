@@ -12,6 +12,7 @@ function App() {
   const [firstPlayer, setFirstPlayer] = useState(3);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [timeInSeconds, setTimeInSeconds] = useState(30);
   const [numOfPlayers, setNumOfPlayers] = useState(7);
   const [playersInput, setPlayersInput] = useState(7);
   const [role, setRole] = useState("player"); // "player" or "admin"
@@ -59,6 +60,7 @@ function App() {
       setCurrentPlayer(data.currentPlayer);
       setIsRunning(data.isRunning);
       setNumOfPlayers(data.numOfPlayers);
+      setTimeInSeconds(data.timer);
 
       if (isAudioUnlocked) {
         if (data.isRunning && data.timer <= 5 && data.timer > 0) {
@@ -76,33 +78,16 @@ function App() {
   }, [isAudioUnlocked, ticSound, buzzerSound]);
 
   // Socket event handlers
-  const handleEndTurn = () => {
-    socket.emit('endTurn');
-  };
+  // Socket event handlers
+  const handleEndTurn = () => socket.emit('endTurn');
+  const handleToggleTimer = () => socket.emit('toggleTimer');
+  const handleEndRound = () => socket.emit('endRound');
+  const handleNewGame = () => socket.emit('newGame');
+  const handleResetGame = () => socket.emit('resetGame');
+  const handleSetPlayersCount = () => socket.emit('setPlayersCount', playersInput);
+  const handleSetStartingPlayer = (playerIndex) => socket.emit('setStartingPlayer', playerIndex);
+  const handleSetTimeInSeconds = () => socket.emit('setTimeInSeconds', timeInSeconds);
 
-  const handleToggleTimer = () => {
-    socket.emit('toggleTimer');
-  };
-
-  const handleEndRound = () => {
-    socket.emit('endRound');
-  };
-
-  const handleNewGame = () => {
-    socket.emit('newGame');
-  };
-
-  const handleResetGame = () => {
-    socket.emit('resetGame');
-  };
-
-  const handleSetPlayersCount = () => {
-    socket.emit('setPlayersCount', playersInput);
-  };
-
-  const handleSetStartingPlayer = (playerIndex) => {
-    socket.emit('setStartingPlayer', playerIndex);
-  };
 
   return (
     <div className="page">
@@ -213,6 +198,12 @@ function App() {
                       </button>
                     );
                   })}
+                </div>
+                {/* Set Timer Duration */}
+                <div className="inputRow">
+                  <label>Timer Duration (seconds):</label>
+                  <input type="number" min="5" value={timeInSeconds} onChange={(e) => setTimeInSeconds(e.target.value)} style={{ width: '60px', padding: '5px' }} />
+                  <button className="buttonEl" onClick={handleSetTimeInSeconds}>Set Timer</button>
                 </div>
               </div>
             )}
