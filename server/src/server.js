@@ -41,8 +41,6 @@ function handleEndRound() {
   isRunning = false;
   if (isFirstRound) {
     firstPlayer = (dealer + 1) % numOfPlayers;
-  } else {
-    firstPlayer = (firstPlayer + 1) % numOfPlayers;
   }
   timer = 30;
   currentPlayer = firstPlayer;
