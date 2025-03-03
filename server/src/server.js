@@ -25,6 +25,7 @@ let numOfPlayers = 7;
 let dealer = 0;
 let firstPlayer = 3;
 let currentPlayer = 3;
+let isFirstRound = true;
 let isRunning = false;
 let intervalId = null;
 
@@ -38,8 +39,14 @@ function handleEndRound() {
   console.log("End Round...");
   clearInterval(intervalId);
   isRunning = false;
+  if (isFirstRound) {
+    firstPlayer = (dealer + 1) % numOfPlayers;
+  } else {
+    firstPlayer = (firstPlayer + 1) % numOfPlayers;
+  }
   timer = 30;
   currentPlayer = firstPlayer;
+  isFirstRound = false;
   broadcastTimerUpdate();
 }
 
@@ -104,6 +111,7 @@ io.on("connection", (socket) => {
     dealer = (dealer + 1) % numOfPlayers;
     firstPlayer = (dealer + 3) % numOfPlayers;
     currentPlayer = firstPlayer;
+    isFirstRound = true;
     broadcastTimerUpdate();
     console.log("Game reset to default state");
   });
@@ -117,6 +125,7 @@ io.on("connection", (socket) => {
     dealer = 0;
     firstPlayer = (dealer + 3) % numOfPlayers;
     currentPlayer = firstPlayer;
+    isFirstRound = true;
     broadcastTimerUpdate();
   });
 
