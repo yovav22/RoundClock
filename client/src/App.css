@@ -1,5 +1,20 @@
 /* App.css */
 
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 1000;
+}
+
+
 /* Page background: green poker table gradient */
 .page {
   background: linear-gradient(to bottom right, #2c662d, #091d08);

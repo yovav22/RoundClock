@@ -6,6 +6,7 @@ import './App.css';
 const socket = io("https://roundclock-mrbs.onrender.com");
 
 function App() {
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [timer, setTimer] = useState(30);
   const [dealer, setDealerPlayer] = useState(0);
   const [firstPlayer, setFirstPlayer] = useState(3);
@@ -19,6 +20,15 @@ function App() {
   const [ticSound, setTicSound] = useState(null);
   const [buzzerSound, setBuzzerSound] = useState(null);
 
+  useEffect(() => {
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+
+    if (isIOS && !isInStandaloneMode) {
+      setShowInstallPrompt(true);
+    }
+  }, []);
+  
   useEffect(() => {
     // Load sounds only once
     const tic = new Audio("/sounds/tic.mp3");
@@ -96,6 +106,13 @@ function App() {
 
   return (
     <div className="page">
+      <div>
+        {showInstallPrompt && (
+          <div className="install-prompt">
+            📲 Tap **"Share"** → **"Add to Home Screen"** to install RoundClock.
+          </div>
+        )}
+      </div>
       <div className="container">
         <h1 className="header">Poker Timer</h1>
 
