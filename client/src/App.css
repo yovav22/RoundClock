@@ -2,17 +2,19 @@
 
 .install-prompt {
   position: fixed;
-  bottom: 20px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%); /* Centers both horizontally & vertically */
   background: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 18px;
   text-align: center;
   z-index: 1000;
+  max-width: 90%; /* Prevents it from going out of screen on small devices */
 }
+
 
 
 /* Page background: green poker table gradient */
